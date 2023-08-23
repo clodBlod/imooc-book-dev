@@ -1,11 +1,13 @@
 package com.imooc.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.imooc.enums.MessageEnum;
 import com.imooc.enums.YesOrNo;
 import com.imooc.mapper.FansMapper;
 import com.imooc.mapper.FansMapperCustom;
 import com.imooc.pojo.Fans;
 import com.imooc.service.FansService;
+import com.imooc.service.MsgService;
 import com.imooc.service.base.BaseInfoProperties;
 import com.imooc.utils.PagedGridResult;
 import com.imooc.utils.RedisOperator;
@@ -32,6 +34,8 @@ public class FansServiceImpl extends BaseInfoProperties implements FansService {
     private FansMapperCustom fansMapperCustom;
     @Autowired
     private RedisOperator redis;
+    @Autowired
+    private MsgService msgService;
 
     /**
      * @param fanId     当前用户的id
@@ -61,6 +65,9 @@ public class FansServiceImpl extends BaseInfoProperties implements FansService {
         }
         // 插入到粉丝表
         fansMapper.insert(fans);
+
+        // 发送系统消息
+        msgService.createMsg(fanId,vlogerId, MessageEnum.FOLLOW_YOU.type,null);
     }
 
     /**

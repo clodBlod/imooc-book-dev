@@ -17,6 +17,10 @@ spring:
       pool-name: DataSourceHikariCP
       max-lifetime: 18000000
       connection-test-query: SELECT 1
+  data:
+    mongodb:
+      uri: mongodb://root:123456@192.168.182.232:27017
+      database: imooc-red-book
   redis:
     host: 192.168.182.232
     port: 6379

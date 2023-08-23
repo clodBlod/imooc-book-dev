@@ -105,4 +105,47 @@ public class CommentController extends BaseInfoProperties {
         return GraceJSONResult.ok(list);
 
     }
+
+    /**
+     * @description: 删除评论
+     * @param commentUserId
+     * @param commentId
+     * @param vlogId
+     * @return: com.imooc.grace.result.GraceJSONResult
+     */
+    @DeleteMapping("/delete")
+    public GraceJSONResult delete(@RequestParam String commentUserId,
+                                  @RequestParam String commentId,
+                                  @RequestParam String vlogId) {
+        commentService.deleteComment(commentUserId,commentId,vlogId);
+        return GraceJSONResult.ok();
+    }
+
+    /**
+     * @description: 喜欢评论
+     * @param commentId
+     * @param userId
+     * @return: com.imooc.grace.result.GraceJSONResult
+     */
+    @PostMapping("/like")
+    public GraceJSONResult like(@RequestParam String userId,
+                                @RequestParam String commentId) {
+        commentService.likeComment(userId,commentId);
+        return GraceJSONResult.ok();
+
+    }
+
+    /**
+     * @description: 取消喜欢评论
+     * @param commentId
+     * @param userId
+     * @return: com.imooc.grace.result.GraceJSONResult
+     */
+    @PostMapping("/unlike")
+    public GraceJSONResult unlike(@RequestParam String userId,
+                                  @RequestParam String commentId) {
+        commentService.unLikeComment(userId,commentId);
+        return GraceJSONResult.ok();
+
+    }
 }

@@ -32,6 +32,7 @@ public class BaseInfoProperties {
 
     // 评论数量
     public static final String REDIS_VLOG_COMMENT_COUNTS = "redis_vlog_comment_counts";
+    public static final String REDIS_COMMENT_BE_LIKE_COUNT = "redis_comment_be_like_count";
 
     // 使用优雅异常返回之后，这个方法就没用了
     public Map getErrors(BindingResult result) {
