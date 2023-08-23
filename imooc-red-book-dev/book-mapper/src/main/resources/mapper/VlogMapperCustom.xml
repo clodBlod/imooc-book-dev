@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.imooc.mapper.VlogMapperCustom" >
+  
+  <select id="getIndexVlogList" parameterType="map" resultType="com.imooc.vo.IndexVlogVO">
+    SELECT
+      v.id as vlogId,
+      v.vloger_id as vlogerId,
+      u.face as vlogerFace,
+      u.nickname as vlogerName,
+      v.title as content,
+      v.url as url,
+      v.cover as cover,
+      v.width as width,
+      v.height as height,
+      v.like_counts as likeCounts,
+      v.comments_counts as commentCounts,
+      v.is_private as isPrivate
+    FROM
+      vlog as v
+        LEFT JOIN
+      users as u
+      ON
+        v.vloger_id = u.id
+    WHERE
+      v.is_private = 0
+      <if test="paramMap.search != null and paramMap.search != '' ">
+        and v.title like '%${paramMap.search}%'
+      </if>
+    ORDER BY
+      v.created_time
+    DESC
+  </select>
+
+  <select id="getVlogDetail" resultType="com.imooc.vo.IndexVlogVO">
+    -- 根据vlogId查询详细
+    SELECT
+      v.id as vlogId,
+      v.vloger_id as vlogerId,
+      u.face as vlogerFace,
+      u.nickname as vlogerName,
+      v.title as content,
+      v.url as url,
+      v.cover as cover,
+      v.width as width,
+      v.height as height,
+      v.like_counts as likeCounts,
+      v.comments_counts as commentCounts,
+      v.is_private as isPrivate
+    FROM
+      vlog as v
+        LEFT JOIN
+      users as u
+      ON
+        v.vloger_id = u.id
+    WHERE
+      v.id = #{vlogId}
+  </select>
+
+  <select id="getLikeVlogList" resultType="com.imooc.vo.IndexVlogVO">
+    select
+      v.id as vlogId,
+      v.vloger_id as vlogerId,
+      v.title as content,
+      v.url as url,
+      v.cover as cover,
+      v.width as width,
+      v.height as height,
+      v.like_counts as likeCounts,
+      v.comments_counts as commentCounts,
+      v.is_private as isPrivate
+    from
+      vlog as v
+    left join
+      my_liked_vlog as mlv
+    on v.id = mlv.vlog_id
+    left join
+      users as u
+    on u.id = mlv.user_id
+    where u.id = #{userId}
+    and v.is_private = 0
+    order by v.created_time desc
+  </select>
+
+  <select id="getMyFollowVlogList" resultType="com.imooc.vo.IndexVlogVO">
+    SELECT
+      v.id as vlogId,
+      v.vloger_id as vlogerId,
+      u.face as vlogerFace,
+      u.nickname as vlogerName,
+      v.title as content,
+      v.url as url,
+      v.cover as cover,
+      v.width as width,
+      v.height as height,
+      v.like_counts as likeCounts,
+      v.comments_counts as commentCounts,
+      v.is_private as isPrivate
+    from
+      vlog as v
+        LEFT JOIN
+      fans as f
+      ON
+        v.vloger_id = f.vloger_id
+        LEFT JOIN
+      users as u
+      ON
+        v.vloger_id = u.id
+    WHERE
+      v.is_private = 0
+      AND
+      f.fan_id = #{userId}
+    ORDER BY
+      v.created_time
+    DESC
+  </select>
+
+
+  <select id="getMyFriendVlogList" resultType="com.imooc.vo.IndexVlogVO">
+    SELECT
+      v.id as vlogId,
+      v.vloger_id as vlogerId,
+      u.face as vlogerFace,
+      u.nickname as vlogerName,
+      v.title as content,
+      v.url as url,
+      v.cover as cover,
+      v.width as width,
+      v.height as height,
+      v.like_counts as likeCounts,
+      v.comments_counts as commentCounts,
+      v.is_private as isPrivate
+    from
+      vlog as v
+        LEFT JOIN
+      fans as f
+      ON
+        v.vloger_id = f.fan_id
+        LEFT JOIN
+      users as u
+      ON
+        f.fan_id = u.id
+    WHERE
+      v.is_private = 0
+    AND
+      u.id = #{userId}
+    AND
+        f.is_fan_friend_of_mine = 1
+    ORDER BY
+      v.created_time
+    DESC
+  </select>
+</mapper>
